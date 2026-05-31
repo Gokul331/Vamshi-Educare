@@ -33,7 +33,8 @@ function App() {
     district: '',
     pincode: '',
     course: 'Select course',
-    college: 'Dhanalakshmi Srinivasan University',
+    departmentName: '',
+    college: '',
   })
   const [submitted, setSubmitted] = useState(false)
 
@@ -219,7 +220,7 @@ function App() {
               <label className="field-label field-full">
                 <span className="field-label-text">Course Selection</span>
                 <select name="course" value={formData.course} onChange={handleChange} required>
-                  <option value="Select course" disabled>
+                  <option value="Select course">
                     Select course
                   </option>
                   {courseOptions.map((option) => (
@@ -229,6 +230,19 @@ function App() {
                   ))}
                 </select>
               </label>
+              {formData.course !== 'Select course' && (
+                <label className="field-label field-full">
+                  <span className="field-label-text">Department Name</span>
+                  <input
+                    type="text"
+                    name="departmentName"
+                    value={formData.departmentName}
+                    onChange={handleChange}
+                    placeholder="Enter department name"
+                    required
+                  />
+                </label>
+              )}
             </div>
           </section>
 
@@ -257,15 +271,15 @@ function App() {
 
           <div className="submit-row">
             <button type="submit" className="submit-button">
-              Submit Application
+              Submit Form
             </button>
           </div>
         </form>
 
         {submitted && (
           <div className="success-message">
-            <h3>Application submitted successfully</h3>
-            <p>Thanks! We have received your application data.</p>
+            <h3>Scholarship Form submitted successfully</h3>
+            <p>Thanks! We have received your data. We will get back to you soon.</p>
           </div>
         )}
       </section>
