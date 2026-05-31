@@ -87,19 +87,6 @@ function App() {
                   required
                 />
               </label>
-
-              <label className="field-label">
-                <span className="field-label-text">Phone Number</span>
-                <input
-                  type="tel"
-                  name="phoneNumber"
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                  placeholder="Enter phone number"
-                  required
-                />
-              </label>
-
               <label className="field-label">
                 <span className="field-label-text">Date of Birth</span>
                 <input
@@ -179,17 +166,6 @@ function App() {
                 />
               </label>
 
-              <label className="field-label">
-                <span className="field-label-text">Mother Number</span>
-                <input
-                  type="tel"
-                  name="motherNumber"
-                  value={formData.motherNumber}
-                  onChange={handleChange}
-                  placeholder="Enter mother phone"
-                  required
-                />
-              </label>
             </div>
           </section>
 
@@ -210,17 +186,7 @@ function App() {
                 />
               </label>
 
-              <label className="field-label field-full">
-                <span className="field-label-text">Address Line 2</span>
-                <input
-                  type="text"
-                  name="addressLine2"
-                  value={formData.addressLine2}
-                  onChange={handleChange}
-                  placeholder="Area/landmark"
-                />
-              </label>
-
+             
               <label className="field-label">
                 <span className="field-label-text">District</span>
                 <input
