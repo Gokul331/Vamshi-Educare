@@ -55,8 +55,6 @@ function App() {
     <main className="app-shell">
       <section className="form-panel">
         <header className="form-header">
-          
-
           <div className="form-title">
             <img src="/Logo.png" alt="Vamshi Edu Care" className="form-logo" />
             <div className="form-title-copy">
@@ -66,8 +64,7 @@ function App() {
               </p>
               <h1>Scholarship Form</h1>
               <p className="form-description">
-                Complete the scholarship application in one go. Start with student details, then fill parent,
-                address, course, and college preferences.
+                Complete the scholarship application in one go.
               </p>
             </div>
           </div>
