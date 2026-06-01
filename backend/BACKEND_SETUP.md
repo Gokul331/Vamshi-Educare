@@ -40,6 +40,8 @@ source myenv/bin/activate
 pip install -r requirements.txt
 ```
 
+> Note: `Pillow` is not required by this backend and has been removed from `requirements.txt` to avoid build failures on newer Python versions during deployment.
+
 ### 3. Run Migrations
 ```bash
 cd myproject
