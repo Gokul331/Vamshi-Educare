@@ -395,6 +395,31 @@
     font-weight: 600;
   }
 
+  .error-message {
+    margin-top: 22px;
+    padding: 18px 22px;
+    border: 1px solid #f5d5d5;
+    background: #fff5f5;
+    color: #d32f2f;
+    border-radius: 18px;
+    font-weight: 600;
+  }
+
+  .error-message p {
+    margin: 0;
+  }
+
+  .submit-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .submit-button:disabled:hover {
+    transform: none;
+    box-shadow: 0 8px 20px rgba(16, 51, 135, 0.08);
+  }
+
   @media (max-width: 900px) {
     .form-panel {
       width: min(100%, 760px);

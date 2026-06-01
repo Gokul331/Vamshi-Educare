@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import { SiTicktick } from "react-icons/si";
+import { submitScholarshipApplication } from './api/scholarshipAPI';
+
 const courseOptions = [
   'Arts',
   'Engineering',
@@ -39,6 +41,8 @@ function App() {
   const [submitted, setSubmitted] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [countdown, setCountdown] = useState(5);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -48,12 +52,29 @@ function App() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setSubmitted(true);
-    console.log('Application submitted', formData);
-    setShowSuccessModal(true);
-    setCountdown(5);
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const result = await submitScholarshipApplication(formData);
+      
+      if (result.success) {
+        setSubmitted(true);
+        setShowSuccessModal(true);
+        setCountdown(5);
+        console.log('Application submitted successfully', result.data);
+      } else {
+        setError(result.error || 'Failed to submit application');
+        console.error('Submission error:', result.error);
+      }
+    } catch (err) {
+      setError('An error occurred. Please check your connection and try again.');
+      console.error('Unexpected error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Effect for countdown and redirect
@@ -325,9 +346,19 @@ function App() {
             </div>
           </section>
 
+          {error && (
+            <div className="error-message">
+              <p>{error}</p>
+            </div>
+          )}
+
           <div className="submit-row">
-            <button type="submit" className="submit-button">
-              Submit Form
+            <button 
+              type="submit" 
+              className="submit-button"
+              disabled={loading}
+            >
+              {loading ? 'Submitting...' : 'Submit Form'}
             </button>
           </div>
         </form>
