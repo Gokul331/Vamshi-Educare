@@ -62,6 +62,14 @@ python manage.py runserver
 
 Server runs on: `http://localhost:8000`
 
+### Static files for deployment
+If you deploy to Render or another host, run:
+```bash
+python manage.py collectstatic --noinput
+```
+
+The backend is configured to serve static files with WhiteNoise in production.
+
 ## API Endpoints
 
 ### Base URL
