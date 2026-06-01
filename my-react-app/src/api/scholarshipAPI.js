@@ -1,5 +1,5 @@
 // API configuration
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://vamshi-educare.onrender.com/api/';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://vamshi-educare.onrender.com/api';
 
 // Scholarship Application API endpoints
 export const APPLICATION_ENDPOINTS = {
