@@ -72,6 +72,24 @@ The backend is configured to serve static files with WhiteNoise in production.
 
 > Use `whitenoise==6.12.0` for compatibility with Python 3.12 on Render.
 
+### Render deployment (recommended build command)
+
+When deploying to Render, add a build command that installs dependencies and collects static files. You can use the helper script included in the repo:
+
+```bash
+# At the project root (Render build command)
+bash backend/render_build.sh
+```
+
+Alternatively, expand the build steps directly in Render's build command:
+
+```bash
+pip install -r backend/requirements.txt
+cd backend/myproject
+python manage.py collectstatic --noinput
+```
+
+Ensure the `STATIC_ROOT` directory is present (it will be created by `collectstatic`) and that your service runs `python manage.py migrate` during setup or in a release phase.
 ## API Endpoints
 
 ### Base URL
