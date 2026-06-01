@@ -1,6 +1,10 @@
 from django.contrib import admin
 from .models import ScholarshipApplication
 
+admin.site.site_header = 'Vamshi Educare Admin'
+admin.site.site_title = 'Vamshi Educare Portal'
+admin.site.index_title = 'Scholarship Applications Dashboard'
+
 
 @admin.register(ScholarshipApplication)
 class ScholarshipApplicationAdmin(admin.ModelAdmin):

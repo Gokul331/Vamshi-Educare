@@ -1,0 +1,19 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Vamshi Educare Admin Login" %}{% endblock %}
+
+{% block extrastyle %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/custom_admin.css' %}">
+{{ block.super }}
+{% endblock %}
+
+{% block content %}
+<div class="login-page-wrapper">
+  <div class="login-branding">
+    <h1>Vamshi Educare</h1>
+    <p>Scholarship administration portal</p>
+  </div>
+  {{ block.super }}
+</div>
+{% endblock %}
