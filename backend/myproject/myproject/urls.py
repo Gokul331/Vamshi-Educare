@@ -3,7 +3,8 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='/admin/', permanent=False), name='root-redirect'),
+    # Named `index` for compatibility with admin_modernize templates
+    path('', RedirectView.as_view(url='/admin/', permanent=False), name='index'),
     path('admin/', admin.site.urls),
     path('api/', include('applications.urls')),
 ]
