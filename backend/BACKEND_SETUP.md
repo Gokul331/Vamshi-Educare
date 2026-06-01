@@ -70,6 +70,8 @@ python manage.py collectstatic --noinput
 
 The backend is configured to serve static files with WhiteNoise in production.
 
+> Use `whitenoise==6.12.0` for compatibility with Python 3.12 on Render.
+
 ## API Endpoints
 
 ### Base URL
