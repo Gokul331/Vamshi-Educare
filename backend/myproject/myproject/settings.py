@@ -26,7 +26,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-di2t9b45t3=z%x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() in ('true', '1', 'yes')
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost 127.0.0.1').split()
+# Updated: Added .onrender.com to allow Render domain
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost 127.0.0.1 .onrender.com').split()
 
 
 # Application definition
@@ -142,9 +143,10 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
 
 CORS_ALLOW_CREDENTIALS = True
 
+# Updated: Added Render URL to CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = os.environ.get(
     'DJANGO_CSRF_TRUSTED_ORIGINS',
-    'http://localhost:5173 http://127.0.0.1:5173 https://vamshi-educare.vercel.app'
+    'http://localhost:5173 http://127.0.0.1:5173 https://vamshi-educare.vercel.app https://vamshi-educare.onrender.com'
 ).split()
 
 # Email Configuration (for form submissions)
