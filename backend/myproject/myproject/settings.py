@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'applications',
 ]
+
 LOGIN_REDIRECT_URL = '/'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -77,57 +79,31 @@ TEMPLATES = [
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+# Database - Automatically uses PostgreSQL on Render, SQLite locally
+import dj_database_url
 
-INTERNAL_DATABASE_URL = os.environ.get(
-    'INTERNAL_DATABASE_URL',
-    'postgresql://vamshi_educare_user:drDdL272KMtz4aFgOSaSo0mbPvAXAaeW@dpg-d8ep4qkp3tds738qocv0-a/vamshi_educare'
-)
-EXTERNAL_DATABASE_URL = os.environ.get(
-    'EXTERNAL_DATABASE_URL',
-    'postgresql://vamshi_educare_user:drDdL272KMtz4aFgOSaSo0mbPvAXAaeW@dpg-d8ep4qkp3tds738qocv0-a.oregon-postgres.render.com/vamshi_educare'
-)
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# Support Render (or other hosts) Postgres via DATABASE_URL env var.
-# If DATABASE_URL is not provided, prefer EXTERNAL_DATABASE_URL and then INTERNAL_DATABASE_URL.
-DATABASE_URL = os.environ.get('DATABASE_URL') or EXTERNAL_DATABASE_URL or INTERNAL_DATABASE_URL
-if DATABASE_URL:
-    try:
-        import dj_database_url
-
-        DATABASES['default'] = dj_database_url.parse(
-            DATABASE_URL,
-            conn_max_age=int(os.environ.get('DATABASE_CONN_MAX_AGE', 600)),
-            ssl_require=not DEBUG,
+if os.environ.get('DATABASE_URL'):
+    # Production: Use PostgreSQL on Render
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True
         )
-    except Exception:
-        # Fallback: basic parse without dj_database_url
-        from urllib.parse import urlparse
-
-        url = urlparse(DATABASE_URL)
-        if url.scheme.startswith('postgres') or url.scheme.startswith('postgresql'):
-            DATABASES['default'] = {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': url.path[1:],
-                'USER': url.username,
-                'PASSWORD': url.password,
-                'HOST': url.hostname,
-                'PORT': url.port or '',
-                'CONN_MAX_AGE': int(os.environ.get('DATABASE_CONN_MAX_AGE', 600)),
-            }
+    }
+    print(f"Using PostgreSQL database on Render")
+else:
+    # Development: Use SQLite locally
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    print("Using SQLite database for development")
 
 
 # Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -145,20 +121,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/6.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -183,13 +152,13 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
 
 CORS_ALLOW_CREDENTIALS = True
 
-# Updated: Added Render URL to CSRF trusted origins
+# CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = os.environ.get(
     'DJANGO_CSRF_TRUSTED_ORIGINS',
     'http://localhost:5173 http://127.0.0.1:5173 https://vamshi-educare.vercel.app https://vamshi-educare.onrender.com'
 ).split()
 
-# Email Configuration (for form submissions)
+# Email Configuration
 EMAIL_BACKEND = os.environ.get(
     'DJANGO_EMAIL_BACKEND',
     'django.core.mail.backends.console.EmailBackend' if DEBUG else 'django.core.mail.backends.smtp.EmailBackend'
@@ -201,7 +170,7 @@ EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() in ('true', '1',
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 
-# Logging: send errors and tracebacks to stdout so hosted platforms (Render) capture them
+# Logging
 LOG_LEVEL = os.environ.get('DJANGO_LOG_LEVEL', 'ERROR')
 
 LOGGING = {
@@ -224,3 +193,24 @@ LOGGING = {
         },
     },
 }
+
+# Auto-create superuser for production (if environment variables are set)
+# This runs only on Render and only if the superuser doesn't exist
+if os.environ.get('DATABASE_URL') and os.environ.get('DJANGO_SUPERUSER_USERNAME'):
+    try:
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        
+        username = os.environ.get('DJANGO_SUPERUSER_USERNAME', 'vamshi')
+        email = os.environ.get('DJANGO_SUPERUSER_EMAIL', 'admin@example.com')
+        password = os.environ.get('DJANGO_SUPERUSER_PASSWORD', 'admin123')
+        
+        if password and not User.objects.filter(username=username).exists():
+            User.objects.create_superuser(username=username, email=email, password=password)
+            print(f"✅ Superuser '{username}' created successfully on Render!")
+        elif not password:
+            print("⚠️ DJANGO_SUPERUSER_PASSWORD not set, skipping superuser creation")
+        else:
+            print(f"ℹ️ Superuser '{username}' already exists")
+    except Exception as e:
+        print(f"⚠️ Could not create superuser: {e}")
