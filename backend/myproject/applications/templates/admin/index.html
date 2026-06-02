@@ -2,31 +2,31 @@
 {% load i18n %}
 
 {% block content %}
-<div class="custom-dashboard-page">
+<div class="refine-dashboard-page">
   <section class="dashboard-hero">
-    <div>
-      <h1>{% trans "Welcome to Vamshi Educare Admin" %}</h1>
-      <p>{% trans "Review scholarship applications, update statuses, and manage student data with a responsive admin dashboard." %}</p>
+    <div class="hero-copy">
+      <span class="hero-pill">Refine Admin</span>
+      <h1>{% trans "Welcome to Vamshi Educare" %}</h1>
+      <p>{% trans "A clean, modern dashboard to manage scholarship applications and student records." %}</p>
     </div>
     <div class="hero-actions">
-      <a href="{% url 'admin:applications_scholarshipapplication_changelist' %}" class="button button-primary">{% trans "View Applications" %}</a>
-      <a href="{% url 'admin:index' %}" class="button button-secondary">{% trans "Refresh Dashboard" %}</a>
+      <a href="{% url 'admin:applications_scholarshipapplication_changelist' %}" class="button button-primary">{% trans "Review Applications" %}</a>
+      <a href="{% url 'admin:applications_scholarshipapplication_add' %}" class="button button-secondary">{% trans "Add New Application" %}</a>
+      <a href="{% url 'admin:password_change' %}" class="button button-ghost">{% trans "Account Settings" %}</a>
     </div>
   </section>
 
-  <section class="dashboard-panels">
-    <article class="dashboard-card">
-      <h2>{% trans "Live Toolbar" %}</h2>
-      <p>{% trans "Use the links below to navigate quickly." %}</p>
+  <section class="dashboard-summary-grid">
+    <article class="summary-card">
+      <h2>{% trans "Quick Actions" %}</h2>
       <ul>
-        <li><a href="{% url 'admin:applications_scholarshipapplication_add' %}">{% trans "Add Scholarship Application" %}</a></li>
-        <li><a href="{% url 'admin:password_change' %}">{% trans "Change Password" %}</a></li>
-        <li><a href="{% url 'admin:logout' %}">{% trans "Logout" %}</a></li>
+        <li><a href="{% url 'admin:applications_scholarshipapplication_changelist' %}">{% trans "View all applications" %}</a></li>
+        <li><a href="{% url 'admin:applications_scholarshipapplication_add' %}">{% trans "Create a new application" %}</a></li>
+        <li><a href="{% url 'admin:logout' %}">{% trans "Sign out" %}</a></li>
       </ul>
     </article>
-    <article class="dashboard-card">
-      <h2>{% trans "Application Models" %}</h2>
-      <p>{% trans "Access all registered models from the admin." %}</p>
+    <article class="summary-card">
+      <h2>{% trans "Model Overview" %}</h2>
       {% if app_list %}
         <ul class="dashboard-model-list">
           {% for app in app_list %}
@@ -41,7 +41,7 @@
           {% endfor %}
         </ul>
       {% else %}
-        <p>{% trans "No applications found." %}</p>
+        <p>{% trans "No registered models available." %}</p>
       {% endif %}
     </article>
   </section>

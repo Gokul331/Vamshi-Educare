@@ -1,9 +1,17 @@
 {% extends "admin/base_site.html" %}
 
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Vamshi Educare Admin{% endblock %}
+{% block title %}{{ title }} | Vamshi Educare{% endblock %}
+
+{% block branding %}
+<a href="{% url 'admin:index' %}" class="refine-branding">
+  <div class="refine-branding__title">{{ site_header|default:_('Django administration') }}</div>
+  <div class="refine-branding__subtitle">Scholarship administration with a refined, modern interface</div>
+</a>
+{% endblock %}
 
 {% block extrastyle %}
 <link rel="stylesheet" type="text/css" href="{% static 'admin/css/custom_admin.css' %}">
+{{ block.super }}
 {% endblock %}
