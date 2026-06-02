@@ -80,12 +80,49 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+INTERNAL_DATABASE_URL = os.environ.get(
+    'INTERNAL_DATABASE_URL',
+    'postgresql://vamshi_educare_user:drDdL272KMtz4aFgOSaSo0mbPvAXAaeW@dpg-d8ep4qkp3tds738qocv0-a/vamshi_educare'
+)
+EXTERNAL_DATABASE_URL = os.environ.get(
+    'EXTERNAL_DATABASE_URL',
+    'postgresql://vamshi_educare_user:drDdL272KMtz4aFgOSaSo0mbPvAXAaeW@dpg-d8ep4qkp3tds738qocv0-a.oregon-postgres.render.com/vamshi_educare'
+)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Support Render (or other hosts) Postgres via DATABASE_URL env var.
+# If DATABASE_URL is not provided, prefer EXTERNAL_DATABASE_URL and then INTERNAL_DATABASE_URL.
+DATABASE_URL = os.environ.get('DATABASE_URL') or EXTERNAL_DATABASE_URL or INTERNAL_DATABASE_URL
+if DATABASE_URL:
+    try:
+        import dj_database_url
+
+        DATABASES['default'] = dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=int(os.environ.get('DATABASE_CONN_MAX_AGE', 600)),
+            ssl_require=not DEBUG,
+        )
+    except Exception:
+        # Fallback: basic parse without dj_database_url
+        from urllib.parse import urlparse
+
+        url = urlparse(DATABASE_URL)
+        if url.scheme.startswith('postgres') or url.scheme.startswith('postgresql'):
+            DATABASES['default'] = {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': url.path[1:],
+                'USER': url.username,
+                'PASSWORD': url.password,
+                'HOST': url.hostname,
+                'PORT': url.port or '',
+                'CONN_MAX_AGE': int(os.environ.get('DATABASE_CONN_MAX_AGE', 600)),
+            }
 
 
 # Password validation
