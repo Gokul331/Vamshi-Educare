@@ -90,6 +90,13 @@ python manage.py collectstatic --noinput
 ```
 
 Ensure the `STATIC_ROOT` directory is present (it will be created by `collectstatic`) and that your service runs `python manage.py migrate` during setup or in a release phase.
+
+For Render, you can also use the included release helper:
+
+```bash
+bash backend/render_release.sh
+```
+
 ## API Endpoints
 
 ### Base URL
