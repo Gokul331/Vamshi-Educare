@@ -178,7 +178,7 @@ CORS_ALLOW_HEADERS = [
 # CSRF Trusted Origins
 CSRF_TRUSTED_ORIGINS = os.environ.get(
     'DJANGO_CSRF_TRUSTED_ORIGINS',
-    'http://localhost:5173 http://127.0.0.1:5173 https://vamshi-educare.vercel.app https://vamshi-educare.onrender.com'
+    'http://localhost:5173 http://127.0.0.1:5173 https://vamshi-educare.vercel.app https://vamshi-educare-beih.onrender.com'
 ).split()
 
 # Email Configuration
